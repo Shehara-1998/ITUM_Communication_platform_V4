@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:itum_communication_platform/notifications/inbox_notifications.dart';
+import 'package:itum_communication_platform/pages/groups/add_members.dart';
 import 'package:itum_communication_platform/pages/polls/polls_home_page.dart';
 import 'package:itum_communication_platform/pages/polls/polls_view.dart';
 import 'package:itum_communication_platform/pages/reminders/reminders_home_page.dart';
@@ -78,37 +79,53 @@ class _ChatPageState extends State<ChatPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: Color(0xFFF1EDF4),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
-          title: Text(widget.groupName, style: const TextStyle(color: Colors.black),),
-          backgroundColor: const Color(0xffE5F9FF),
+          title: Text(widget.groupName, style: const TextStyle(color: Colors.white),),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25)
+              ),
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: <Color>[Color(0xFFA88BEB), Color(0xFFD5ADC8)]),
+            ),
+          ),
           leading: IconButton(
               onPressed: (){
                 Navigator.pop(context);
               },
-              icon: const Icon(Icons.arrow_back_ios, color: Color(0xff649EFF))),
+              icon: const Icon(Icons.arrow_back_ios, color: Colors.white)),
           actions: [
             IconButton(
                 onPressed: (){
                   nextScreen(context, PollsViewPage());
                 },
-                icon: Icon(Icons.poll, color: Color(0xff649EFF),)),
+                icon: Icon(Icons.poll, color: Colors.white,)),
             IconButton(
                 onPressed: (){
                   nextScreen(context, InboxNotifications());
                 },
-                icon: Icon(Icons.notifications, color: Color(0xff649EFF),)),
+                icon: Icon(Icons.notifications, color: Colors.white,)),
             Builder(
               builder: (context) => IconButton(
                   onPressed: (){
                     Scaffold.of(context).openEndDrawer();
                   },
-                  icon: const Icon(Icons.more_vert, color: Color(0xff649EFF),)),
+                  icon: const Icon(Icons.more_vert, color: Colors.white,)),
             ),
           ],
           bottom: TabBar(
-            labelColor: Colors.black,
+            indicator: UnderlineTabIndicator(
+              insets: EdgeInsets.symmetric(horizontal: 16),
+              borderSide: BorderSide(color: Colors.blue, width: 3.0)
+            ),
+            labelColor: Colors.white,
               tabs: [
                 Tab(
                   text: 'Students',
@@ -117,6 +134,12 @@ class _ChatPageState extends State<ChatPage> {
                   text: 'Admin',
                 )
               ]),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25)
+              )
+          ),
         ),
           endDrawer: Drawer(
             child: ListView(
@@ -131,16 +154,27 @@ class _ChatPageState extends State<ChatPage> {
                     ));
                   },
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  leading: const Icon(Icons.info, color: Color(0xff649EFF),),
+                  leading: const Icon(Icons.info, color: Color(0xFFA88BEB),),
                   title: const Text('Group Info', style: TextStyle(color: Colors.black),),
                 ),
+                "${userId}_$name"== admin ? ListTile(
+                  onTap: (){
+                    nextScreen(context, AddMembers(
+                      groupId: widget.groupId,
+                      groupName: widget.groupName,
+                    ));
+                  },
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  leading: const Icon(Icons.add, color: Color(0xFFA88BEB),),
+                  title: const Text('Add Members', style: TextStyle(color: Colors.black),),
+                ) : Container() ,
                 ListTile(
                   onTap: (){
                     nextScreen(context, PollsHome(
                     ));
                   },
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  leading: const Icon(Icons.poll, color: Color(0xff649EFF),),
+                  leading: const Icon(Icons.poll, color: Color(0xFFA88BEB),),
                   title: const Text('Create Polls', style: TextStyle(color: Colors.black),),
                 ),
                 ListTile(
@@ -149,7 +183,7 @@ class _ChatPageState extends State<ChatPage> {
                     ));
                   },
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  leading: const Icon(Icons.notifications, color: Color(0xff649EFF),),
+                  leading: const Icon(Icons.notifications, color: Color(0xFFA88BEB),),
                   title: const Text('Create Reminders', style: TextStyle(color: Colors.black),),
                 ),
               ],
@@ -197,7 +231,7 @@ class _ChatPageState extends State<ChatPage> {
                                       height: 50,
                                       width: 50,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xff649EFF),
+                                        color: const Color(0xFFA88BEB),
                                         borderRadius: BorderRadius.circular(30),
                                       ),
                                       child: const Center(

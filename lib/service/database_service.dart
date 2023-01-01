@@ -15,6 +15,7 @@ class DatabaseService{
     return await userCollection.doc(uid).set({
       "fullName" : fullName,
       "email" : email,
+      "reg" : email.replaceAll("@itum.mrt.ac.lk",""),
       "groups" : [],
       "profilePic" : "",
       "uid" : uid,
@@ -94,6 +95,11 @@ class DatabaseService{
     return groupCollection.where("groupName", isEqualTo: groupName).get();
   }
 
+  //search by ITUMemail
+  searchByEmail(String reg){
+    return userCollection.where("reg", isEqualTo: reg).get();
+  }
+
   // function -> bool
   Future<bool> isUserJoined(String groupName, String groupId, String userName) async{
     DocumentReference userDocumentReference =userCollection.doc(uid);
@@ -101,6 +107,19 @@ class DatabaseService{
 
     List<dynamic> groups = await documentSnapshot['groups'];
     if(groups.contains("${groupId}_$groupName")){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  Future<bool> isUserAdded( String groupId, String userName,String userId) async{
+    DocumentReference groupDocumentReference =groupCollection.doc(groupId);
+    DocumentSnapshot documentSnapshot = await groupDocumentReference.get();
+
+    List<dynamic> members = await documentSnapshot['members'];
+    if(members.contains("${userId}_$userName")){
       return true;
     }
     else{
@@ -132,6 +151,33 @@ class DatabaseService{
       });
       await groupDocumentReference.update({
         "members" : FieldValue.arrayUnion(["${uid}_$userName"])
+      });
+    }
+  }
+
+  Future toggleGroupAdd(String groupName, String groupId, String userName, String userid)async{
+    // doc reference
+    DocumentReference userDocumentReference = userCollection.doc(userid);
+    DocumentReference groupDocumentReference = groupCollection.doc(groupId);
+
+    DocumentSnapshot documentSnapshot = await userDocumentReference.get();
+    List<dynamic> groups = await documentSnapshot['groups'];
+
+    // if user has our groups -> then remove then or also in other part re join
+    if(groups.contains("${groupId}_$groupName")){
+      await userDocumentReference.update({
+        "groups" : FieldValue.arrayRemove(["${groupId}_$groupName"])
+      });
+      await groupDocumentReference.update({
+        "members" : FieldValue.arrayRemove(["${userid}_$userName"])
+      });
+    }
+    else{
+      await userDocumentReference.update({
+        "groups" : FieldValue.arrayUnion(["${groupId}_$groupName"])
+      });
+      await groupDocumentReference.update({
+        "members" : FieldValue.arrayUnion(["${userid}_$userName"])
       });
     }
   }
