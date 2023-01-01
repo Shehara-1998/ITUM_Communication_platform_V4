@@ -39,6 +39,8 @@ dependencies:
   firebase_core: ^1.22.0
   shared_preferences: ^2.0.15
   provider: ^6.0.4
+  intl: ^0.17.0
+  lottie: ^2.1.0
 
 dev_dependencies:
   flutter_test:

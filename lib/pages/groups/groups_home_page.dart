@@ -84,7 +84,7 @@ class _GroupHomeState extends State<GroupHome> {
             gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: <Color>[Color(0xFFA88BEB), Color(0xFFF8CEEC)]),
+                colors: <Color>[Color(0xFFA88BEB), Color(0xFFD5ADC8)]),
           ),
         ),
         centerTitle: true,
@@ -186,7 +186,7 @@ class _GroupHomeState extends State<GroupHome> {
           child: const Icon(Icons.add, color: Colors.white,size: 30,),
             decoration : BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(colors: [Color(0xFFA88BEB), Color(0xFFF8CEEC)])
+                gradient: LinearGradient(colors: [Color(0xFFA88BEB), Color(0xFFD5ADC8)])
             )
         ),
         onPressed: (){
