@@ -3,7 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:itum_communication_platform/helper/helper_function.dart';
 import 'package:itum_communication_platform/pages/auth/Login_Page.dart';
 import 'package:itum_communication_platform/pages/groups/groups_home_page.dart';
+import 'package:itum_communication_platform/pages/jobs/jobs_home_page.dart';
 import 'package:itum_communication_platform/pages/polls/polls_home_page.dart';
+import 'package:itum_communication_platform/pages/polls/polls_view.dart';
 import 'package:provider/provider.dart';
 
 void main() async{
@@ -42,7 +44,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers:[
-        ChangeNotifierProvider(create: (context) => DbProvider()),],
+        ChangeNotifierProvider(create: (context) => DbProvider()),
+        ChangeNotifierProvider(create: (context) => JobDbProvider()),
+        ChangeNotifierProvider(create: (context) => FetchPollsProvider()),],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: _isSignedIn ? GroupHome() : LoginPage(),
