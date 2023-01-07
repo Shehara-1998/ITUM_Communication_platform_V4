@@ -1,17 +1,17 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\flutter_projects\\ITUM_Communication_platformV3\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
+            "outputFile": "D:\\flutter_projects_git\\Itum_communication_v5\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
             "map": [
                 {
-                    "source": "E:\\flutter_projects\\ITUM_Communication_platformV3\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "D:\\flutter_projects_git\\Itum_communication_v5\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
-                        "startOffsets": "172,817",
+                        "startOffsets": "175,831",
                         "endLines": "7,16",
                         "endColumns": "12,12",
-                        "endOffsets": "475,981"
+                        "endOffsets": "482,997"
                     },
                     "to": {
                         "startLines": "2,7",

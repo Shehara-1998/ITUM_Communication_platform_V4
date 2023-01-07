@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 ///poll creating page
@@ -21,7 +24,28 @@ class _PollsHomeState extends State<PollsHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Add a New Poll"),),
+      backgroundColor: Color(0xFFF1EDF4),
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25)
+            ),
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[Color(0xFFA88BEB), Color(0xFFD5ADC8)]),
+          ),
+        ),
+        title: const Text("Add a Poll",
+          style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w600),),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25)
+            )
+        ),),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -31,9 +55,16 @@ class _PollsHomeState extends State<PollsHome> {
                 key: _formKey,
                 child: Column(
                     children: [
+                      Lottie.network('https://assets3.lottiefiles.com/packages/lf20_EyJRUV.json',
+                        width: 280,
+                        height: 250,
+                        fit: BoxFit.fill,),
                       formWidget(question, label: "Question"),
+                      const SizedBox(height: 15),
                       formWidget(option1, label: "Option 1"),
+                      const SizedBox(height: 15),
                       formWidget(option2, label: "Option 2"),
+                      const SizedBox(height: 15),
                       formWidget(duration, label: "Duration",onTap: () {
                         showDatePicker(
                             context: context,
@@ -48,6 +79,7 @@ class _PollsHomeState extends State<PollsHome> {
                           }
                         });
                       }),
+                      const SizedBox(height: 35),
 
                       Consumer<DbProvider>(builder: (context, db, child) {
                         WidgetsBinding.instance.addPostFrameCallback(
@@ -83,14 +115,15 @@ class _PollsHomeState extends State<PollsHome> {
                           },
                           child: Container(
                             height: 50,
-                            width: MediaQuery.of(context).size.width-100,
+                            width: MediaQuery.of(context).size.width-190,
                             decoration: BoxDecoration(
                                 color: db.status == true
                                     ? Colors.grey
-                                    : Colors.blue,
-                                borderRadius: BorderRadius.circular(10)),
+                                    : Color(0xFFA88BEB),
+                                borderRadius: BorderRadius.circular(25)),
                             alignment: Alignment.center,
-                            child: Text(db.status == true ? "please wait..":"post poll"),
+                            child: Text(db.status == true ? "please wait..":"post poll",
+                              style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w600),),
                           ),
                         );
                       }
@@ -164,21 +197,19 @@ class DbProvider extends ChangeNotifier {
 
   CollectionReference pollCollection =
   FirebaseFirestore.instance.collection("polls");
-  void addPoll(
-      {required String question,
-        required String duration,
-        required List<Map> options}) async {
+
+  void addPoll({required String question,
+    required String duration,
+    required List<Map> options}) async {
     _status = true;
     notifyListeners();
     try {
       ///
       final data = {
-        // "authorId": user!.uid,
-        //  "author": {
-        //    "uid": user!.uid,
-        //    "profileImage": user!.photoURL,
-        //    "name": user!.displayName,
-        //  },
+        "author": {
+          "name": user!.email,
+          "uid": user!.uid,
+        },
         "dateCreated": DateTime.now(),
         "poll": {
           "total_votes": 0,
@@ -203,9 +234,9 @@ class DbProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   void clear() {
     _message = "";
     notifyListeners();
   }
-
 }
