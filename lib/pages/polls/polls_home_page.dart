@@ -235,8 +235,78 @@ class DbProvider extends ChangeNotifier {
     }
   }
 
+  void votePoll({
+    required String? pollId,
+    required DocumentSnapshot pollData,
+    required int previousTotalVotes,
+    required String seletedOptions
+  }) async {
+    _status = true;
+    notifyListeners();
+
+    try {
+      List voters = pollData['poll']["voters"];
+
+      voters.add({
+        "name": user!.email,///=======changed
+        "uid": user!.uid,
+        "selected_option": seletedOptions,
+      });
+
+
+
+      ///create option and add items
+      ///options
+      ///options
+      List options = pollData["poll"]["options"];
+      for (var i in options) {
+        if (i["answer"] == seletedOptions) {
+          i["percent"]++;
+        } else {
+          if (i["percent"] > 0) {
+            i["percent"]--;
+          }
+        }
+      }
+
+      ///update poll
+
+      final data = {
+        "author": {
+          "uid": pollData["author"]["uid"],
+          // "profileImage": pollData["author"]["profileImage"],
+          "name": pollData["author"]["name"],
+        },
+        "dateCreated": pollData["dateCreated"],
+        "poll": {
+          "total_votes": previousTotalVotes + 1,
+          "voters": voters,
+          "question": pollData["poll"]["question"],
+          "duration": pollData["poll"]["duration"],
+          "options": options,
+        }
+      };
+
+      await pollCollection.doc(pollId).update(data);
+      _message = "Vote Recorded";
+      _status = false;
+      notifyListeners();
+
+
+    } on FirebaseException catch (e) {
+      _message = e.message!;
+      _status = false;
+      notifyListeners();
+    } catch (e) {
+      _message = "Please try again...";
+      _status = false;
+      notifyListeners();
+    }
+  }
+
   void clear() {
     _message = "";
     notifyListeners();
   }
+
 }
